@@ -1,0 +1,5 @@
+/.idea
+*.keystore
+/platforms/android/local.properties
+/platforms/android/project.properties
+/platforms/android/proguard-project.txt
