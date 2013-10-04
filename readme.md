@@ -1,4 +1,4 @@
-# Katra
+# Katra for Android
 
 ## Basic interpreter/compiler
 

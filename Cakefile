@@ -1,3 +1,19 @@
+#+--------------------------------------------------------------------+
+#| Cakefile
+#+--------------------------------------------------------------------+
+#| Copyright DarkOverlordOfData (c) 2012 - 2013
+#+--------------------------------------------------------------------+
+#|
+#| This file is a part of Katra
+#|
+#| Katra is free software you can copy, modify, and distribute
+#| it under the terms of the MIT License
+#|
+#+--------------------------------------------------------------------+
+#
+#	cake
+#
+
 fs = require 'fs'
 util = require 'util'
 {exec} = require 'child_process'
@@ -32,7 +48,7 @@ task 'serve', 'Serve the app', ->
 #
 task 'build:krt', 'Build the runtime', ->
 
-  exec 'coffee -o vendor -c src/krt.coffee', ($err, $stdout, $stderr) ->
+  exec 'coffee -o www/js -c src/krt.coffee', ($err, $stdout, $stderr) ->
 
     util.log 'error : ' + $err if $err?
     util.log 'ok' unless $err?
@@ -42,7 +58,7 @@ task 'build:krt', 'Build the runtime', ->
 #
 task 'build:kc', 'Build the parser', ->
 
-  exec 'jison vendor/kc.y src/kc.l --outfile vendor/kc.js', ($err, $stdout, $stderr) ->
+  exec 'jison www/js/kc.y src/kc.l --outfile www/js/kc.js', ($err, $stdout, $stderr) ->
 
     util.log $err if $err if $err?
     util.log $stderr if $stderr if $stderr?
