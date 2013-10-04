@@ -48,7 +48,7 @@ task 'serve', 'Serve the app', ->
 #
 task 'build:krt', 'Build the runtime', ->
 
-  exec 'coffee -o www/js -c src/krt.coffee', ($err, $stdout, $stderr) ->
+  exec 'coffee -o www/js/lib -c lib/krt.coffee', ($err, $stdout, $stderr) ->
 
     util.log 'error : ' + $err if $err?
     util.log 'ok' unless $err?
@@ -58,7 +58,7 @@ task 'build:krt', 'Build the runtime', ->
 #
 task 'build:kc', 'Build the parser', ->
 
-  exec 'jison www/js/kc.y src/kc.l --outfile www/js/kc.js', ($err, $stdout, $stderr) ->
+  exec 'jison lib/kc.y lib/kc.l --outfile www/js/lib/kc.js', ($err, $stdout, $stderr) ->
 
     util.log $err if $err if $err?
     util.log $stderr if $stderr if $stderr?
