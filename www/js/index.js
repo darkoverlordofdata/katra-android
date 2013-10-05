@@ -4,7 +4,9 @@ require.config({
     jquery: "vendor/jquery",
     jquerymobile: "vendor/jquerymobile",
     underscore: "vendor/lodash",
-    backbone: "vendor/backbone"
+    backbone: "vendor/backbone",
+    text: "vendor/text",
+    katra: "lib/kc"
   },
   shim: {
     backbone: {
@@ -14,7 +16,7 @@ require.config({
   }
 });
 
-require(["jquery", "backbone", "routers/ProgramRouter"], function($, Backbone, Router) {
+require(["jquery", "backbone", "Router"], function($, Backbone, Router) {
   $(document).on("mobileinit", function() {
     $.mobile.linkBindingEnabled = false;
     return $.mobile.hashListeningEnabled = false;

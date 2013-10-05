@@ -1,5 +1,5 @@
 #+--------------------------------------------------------------------+
-#| ProgramView.coffee
+#| ListView.coffee
 #+--------------------------------------------------------------------+
 #| Copyright DarkOverlordOfData (c) 2013
 #+--------------------------------------------------------------------+
@@ -11,20 +11,19 @@
 #|
 #+--------------------------------------------------------------------+
 #
-# ProgramView
+# ListView
 #
 
 define [
   "jquery"
   "backbone"
-  "collections/Programs"
   "JST"
-], ($, Backbone, Programs, programTemplate) ->
+], ($, Backbone, JST) ->
 
-  class ProgramView extends Backbone.View
+  class ListView extends Backbone.View
 
     render: ->
       #$('.menu a').removeClass 'active'
       #$('.menu a[href="#"]').parent().addClass 'active'
-      $("#content").html JST.program()
+      $("#content").html JST.list()
       @

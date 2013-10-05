@@ -2,22 +2,22 @@
 var __hasProp = {}.hasOwnProperty,
   __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
-define(["jquery", "backbone", "collections/Programs", "JST"], function($, Backbone, Programs, programTemplate) {
-  var ProgramView, _ref;
-  return ProgramView = (function(_super) {
-    __extends(ProgramView, _super);
+define(["jquery", "backbone", "JST"], function($, Backbone, JST) {
+  var ListView, _ref;
+  return ListView = (function(_super) {
+    __extends(ListView, _super);
 
-    function ProgramView() {
-      _ref = ProgramView.__super__.constructor.apply(this, arguments);
+    function ListView() {
+      _ref = ListView.__super__.constructor.apply(this, arguments);
       return _ref;
     }
 
-    ProgramView.prototype.render = function() {
-      $("#content").html(JST.program());
+    ListView.prototype.render = function() {
+      $("#content").html(JST.list());
       return this;
     };
 
-    return ProgramView;
+    return ListView;
 
   })(Backbone.View);
 });

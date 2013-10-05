@@ -1,5 +1,5 @@
 #+--------------------------------------------------------------------+
-#| ProgramView.coffee
+#| HomeView.coffee
 #+--------------------------------------------------------------------+
 #| Copyright DarkOverlordOfData (c) 2013
 #+--------------------------------------------------------------------+
@@ -11,7 +11,7 @@
 #|
 #+--------------------------------------------------------------------+
 #
-# ProgramView
+# HomeView
 #
 
 define [
@@ -19,12 +19,16 @@ define [
   "backbone"
   "collections/Programs"
   "JST"
-], ($, Backbone, Programs, programTemplate) ->
+  ], ($, Backbone, Programs, JST) ->
 
-  class ProgramView extends Backbone.View
+  class HomeView extends Backbone.View
+
+
 
     render: ->
       #$('.menu a').removeClass 'active'
       #$('.menu a[href="#"]').parent().addClass 'active'
-      $("#content").html JST.program()
+
+      @programs = new Programs
+      $("#content").html JST.home()
       @

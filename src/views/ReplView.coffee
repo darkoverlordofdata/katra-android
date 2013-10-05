@@ -1,5 +1,5 @@
 #+--------------------------------------------------------------------+
-#| ProgramModel.coffee
+#| ReplView.coffee
 #+--------------------------------------------------------------------+
 #| Copyright DarkOverlordOfData (c) 2013
 #+--------------------------------------------------------------------+
@@ -11,12 +11,18 @@
 #|
 #+--------------------------------------------------------------------+
 #
-# ProgramModel
+# ReplView
 #
+define [
+  "jquery"
+  "backbone"
+  "JST"
+], ($, Backbone, JST) ->
 
-# Includes file dependencies
-define ["jquery", "backbone"], ($, Backbone) ->
-  
-  # The Model constructor
-  class ProgramModel extends Backbone.Model
+  class ReplView extends Backbone.View
 
+    render: ->
+      #$('.menu a').removeClass 'active'
+      #$('.menu a[href="#"]').parent().addClass 'active'
+      $("#content").html JST.repl()
+      @

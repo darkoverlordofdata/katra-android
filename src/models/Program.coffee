@@ -1,5 +1,5 @@
 #+--------------------------------------------------------------------+
-#| ProgramView.coffee
+#| ProgramModel.coffee
 #+--------------------------------------------------------------------+
 #| Copyright DarkOverlordOfData (c) 2013
 #+--------------------------------------------------------------------+
@@ -11,20 +11,14 @@
 #|
 #+--------------------------------------------------------------------+
 #
-# ProgramView
+# ProgramModel
 #
 
+# Includes file dependencies
 define [
   "jquery"
   "backbone"
-  "collections/Programs"
-  "JST"
-], ($, Backbone, Programs, programTemplate) ->
+  ], ($, Backbone) ->
 
-  class ProgramView extends Backbone.View
-
-    render: ->
-      #$('.menu a').removeClass 'active'
-      #$('.menu a[href="#"]').parent().addClass 'active'
-      $("#content").html JST.program()
-      @
+  # The Model constructor
+  class Program extends Backbone.Model
