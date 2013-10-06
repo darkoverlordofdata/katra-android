@@ -11,45 +11,106 @@
 #|
 #+--------------------------------------------------------------------+
 #
-# ProgramRouter
+# Router
 #
+define (require) ->
 
-# Includes file dependencies
-define [
-  "jquery"
-  "backbone"
-  "views/HomeView"
-  "views/ReplView"
-  "views/AboutView"
-  ], ($, Backbone, HomeView, ReplView, AboutView) ->
+  $             = require("jquery")
+  Backbone      = require("backbone")
+  HomeView      = require("views/HomeView")
+  ReplView      = require("views/ReplView")
+  AboutView     = require("views/AboutView")
+  ProgramView   = require("views/ProgramView")
 
+
+  #
+  #   Top level application controller for katra
+  #
   class Router extends Backbone.Router
 
+    #
+    # @property [Object] homeView render the main page
+    #
     homeView: null
+    #
+    # @property [Object] replView render the repl page
+    #
     replView: null
+    #
+    # @property [Object] aboutView render the about info
+    #
     aboutView: null
+    #
+    # @property [Object] progView render the program details
+    #
+    progView: null
 
+    #
+    # @property [Object<Array>] routes  hash of valid routes/actions
+    #
+    routes:
+      ""          : "homeAction"
+      "repl"      : "replAction"
+      "about"     : "aboutAction"
+      "prog/:id"  : "progAction"
+
+    #
+    # Initialize
+    #
+    #   Initialize routing
+    #
+    # @return [Void]
+    #
     initialize: ->
       Backbone.history.start()
 
-    routes:
-      ""        : "home"
-      "repl"    : "repl"
-      "about"   : "about"
 
-
-    home: ->
-      console.log "Route [home]"
+    #
+    # Home
+    #
+    # The main page
+    #
+    # @access	public
+    # @return [Void]
+    #
+    homeAction: ->
       @homeView = new HomeView unless @homeView?
       @homeView.render()
 
-    repl: ->
-      console.log "Route [repl]"
+    #
+    # Repl
+    #
+    # A Basic repl
+    #
+    # @access	public
+    # @return [Void]
+    #
+    replAction: ->
       @replView = new ReplView unless @replView?
       @replView.render()
 
-    about: ->
-      console.log "Route [about]"
+    #
+    # About
+    #
+    # About Katra
+    #
+    # @access	public
+    # @return [Void]
+    #
+    aboutAction: ->
       @aboutView = new AboutView unless @aboutView?
       @aboutView.render()
 
+
+    #
+    # Program details
+    #
+    # Run?
+    #
+    # @access	public
+    # @param  [Integer] id  record id
+    # @return [Void]
+    #
+    progAction: (id) ->
+      @progView = new ProgramView(id)
+      @progView.render()

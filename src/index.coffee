@@ -20,12 +20,12 @@
 require.config
 
   paths:
-    jquery        : "vendor/jquery"
-    jquerymobile  : "vendor/jquerymobile"
-    underscore    : "vendor/lodash"
-    backbone      : "vendor/backbone"
-    text          : "vendor/text"
-    katra         : "lib/kc"
+    jquery        : "vendor/jquery-2.0.3.min"
+    jquerymobile  : "vendor/jquery.mobile-1.3.2.min"
+    underscore    : "vendor/lodash.underscore.min"
+    backbone      : "vendor/backbone-min"
+    katra         : "lib/katra"
+    kc            : "lib/kc"
 
 
   shim:
@@ -37,11 +37,11 @@ require.config
 #
 # Start me up
 #
-require [
-  "jquery"
-  "backbone"
-  "Router"
-  ], ($, Backbone, Router) ->
+define (require) ->
+
+  $           = require("jquery")
+  Backbone    = require("backbone")
+  Router      = require("Router")
 
   #
   # Hook the jQueryMobile init event

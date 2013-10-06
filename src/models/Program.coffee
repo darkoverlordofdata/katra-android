@@ -14,11 +14,10 @@
 # ProgramModel
 #
 
-# Includes file dependencies
-define [
-  "jquery"
-  "backbone"
-  ], ($, Backbone) ->
+define (require) ->
+
+  $         = require("jquery")
+  Backbone  = require("backbone")
 
   # The Model constructor
   class Program extends Backbone.Model

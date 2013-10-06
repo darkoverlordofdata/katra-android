@@ -22,21 +22,9 @@ util = require 'util'
 #
 # Compile a backbone app
 #
-task 'build', 'Build the app', ->
+task 'build:src', 'Compile src', ->
 
-  exec 'coffee --bare --output www/js src ', ($err, $stdout, $stderr) ->
-
-    util.log $err if $err?
-    util.log $stderr if $stderr?
-    util.log $stdout if $stdout?
-    util.log 'ok' unless $stdout?
-
-#
-# Compile a backbone app
-#
-task 'serve', 'Serve the app', ->
-
-  exec 'sencha fs web -port 53610 start -map www', ($err, $stdout, $stderr) ->
+  exec 'coffee --bare --output tst/js src ', ($err, $stdout, $stderr) ->
 
     util.log $err if $err?
     util.log $stderr if $stderr?
@@ -44,21 +32,23 @@ task 'serve', 'Serve the app', ->
     util.log 'ok' unless $stdout?
 
 #
-# Compile the Katra Runtime
+# Build the final app
 #
-task 'build:krt', 'Build the runtime', ->
+task 'build:app', 'Build the app', ->
 
-  exec 'coffee -o www/js/lib -c lib/krt.coffee', ($err, $stdout, $stderr) ->
+  exec 'r.js -o build.js', ($err, $stdout, $stderr) ->
 
-    util.log 'error : ' + $err if $err?
-    util.log 'ok' unless $err?
+    util.log $err if $err?
+    util.log $stderr if $stderr?
+    util.log $stdout if $stdout?
+    util.log 'ok' unless $stdout?
 
 #
 # Compile the Katrac Parser
 #
 task 'build:kc', 'Build the parser', ->
 
-  exec 'jison lib/kc.y lib/kc.l --outfile www/js/lib/kc.js', ($err, $stdout, $stderr) ->
+  exec 'jison src/lib/kc.y src/lib/kc.l --outfile tst/js/lib/kc.js', ($err, $stdout, $stderr) ->
 
     util.log $err if $err if $err?
     util.log $stderr if $stderr if $stderr?

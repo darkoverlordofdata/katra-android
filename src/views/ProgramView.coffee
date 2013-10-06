@@ -13,18 +13,29 @@
 #
 # ProgramView
 #
+define (require) ->
 
-define [
-  "jquery"
-  "backbone"
-  "collections/Programs"
-  "JST"
-], ($, Backbone, Programs, programTemplate) ->
+  $         = require("jquery")
+  Backbone  = require("backbone")
+  JST       = require("JST")
+  Programs  = require("collections/Programs")
+  #require 'prettify'
+  #require 'basic'
+
 
   class ProgramView extends Backbone.View
+
+    constructor: (id) ->
+      @id = parseInt(id, 10)
+
 
     render: ->
       #$('.menu a').removeClass 'active'
       #$('.menu a[href="#"]').parent().addClass 'active'
-      $("#content").html JST.program()
-      @
+
+      programs = new Programs
+      @program = programs.get(@id)
+      $.get "bas/"+@program.get('source'), (data) =>
+        $("#content").html JST.program(program: @program.toJSON(), source:data)
+        $('[data-role="content"]').trigger 'create'
+        #setTimeout prettyPrint, 1

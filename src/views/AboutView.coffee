@@ -13,16 +13,25 @@
 #
 # AboutView
 #
-define [
-  "jquery"
-  "backbone"
-  "JST"
-], ($, Backbone, JST) ->
+define (require) ->
 
+  $         = require("jquery")
+  Backbone  = require("backbone")
+  JST       = require("JST")
+
+  #
+  # About Katra
+  #
   class AboutView extends Backbone.View
 
+    #
+    # Render the about paage
+    #
+    # @return [Void]
+    #
     render: ->
       #$('.menu a').removeClass 'active'
       #$('.menu a[href="#"]').parent().addClass 'active'
       $("#content").html JST.about()
+      $('[data-role="content"]').trigger('create');
       @

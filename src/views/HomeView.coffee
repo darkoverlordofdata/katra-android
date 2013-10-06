@@ -13,22 +13,28 @@
 #
 # HomeView
 #
+define (require) ->
 
-define [
-  "jquery"
-  "backbone"
-  "collections/Programs"
-  "JST"
-  ], ($, Backbone, Programs, JST) ->
+  $         = require("jquery")
+  Backbone  = require("backbone")
+  Programs  = require("collections/Programs")
+  JST       = require("JST")
 
+  #
+  # The main page
+  #
   class HomeView extends Backbone.View
 
-
-
+    #
+    # Render the main paage
+    #
+    # @return [Void]
+    #
     render: ->
       #$('.menu a').removeClass 'active'
       #$('.menu a[href="#"]').parent().addClass 'active'
 
       @programs = new Programs
-      $("#content").html JST.home()
+      $("#content").html JST.home(programs: @programs.toJSON())
+      $('[data-role="content"]').trigger('create');
       @

@@ -14,18 +14,28 @@
 # Programs
 #
 
-# Includes file dependencies
-define [
-  "jquery"
-  "backbone"
-  "models/Program"
-  ], ($, Backbone, Program) ->
+define (require) ->
+
+  $         = require("jquery")
+  Backbone  = require("backbone")
+  Program   = require("models/Program")
 
 
+  #
+  # A List of Programs
+  #
   class Programs extends Backbone.Collection
 
+    #
+    # @property [Object] model  Model to bas this collection on
+    #
     model: Program
 
+    #
+    # Populate the collection
+    #
+    # @return [Void]
+    #
     constructor: ->
       super [
         {"id":1, "name":"Test Program", "source":"TEST.BAS"}
