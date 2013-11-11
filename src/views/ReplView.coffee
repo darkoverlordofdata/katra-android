@@ -19,8 +19,9 @@ define (require) ->
   Backbone  = require("backbone")
   JST       = require("JST")
 
-  require 'kc'    # the katra compiler
+  require 'rte'   # i/o runtime
   require 'katra' # the katra runtime
+  require 'kc'    # the katra compiler
 
   #
   # Basic Repl
@@ -47,7 +48,9 @@ define (require) ->
     # @return [Void]
     #
     exec: () ->
-      try
-        kc.parse $('#repl-input').val()
-      catch e
-        $('#repl-output').html e.toString()
+      for line in $('#repl-input').val().split('\n')
+        try
+          kc.parse line+"\n"
+        catch e
+          $('#repl-output').html e.toString()
+          return

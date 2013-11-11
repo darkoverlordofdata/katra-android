@@ -36,7 +36,7 @@ task 'build:src', 'Compile src', ->
 #
 task 'build:parser', 'Build the parser', ->
 
-  exec 'jison src/lib/kc.y src/lib/kc.l --outfile dev/js/lib/kc.bnf.js', ($err, $stdout, $stderr) ->
+  exec 'jison src/lib/kc.y src/lib/kc.l --outfile dev/js/lib/kc.js', ($err, $stdout, $stderr) ->
 
     util.log $err if $err if $err?
     util.log $stderr if $stderr if $stderr?

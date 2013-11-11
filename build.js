@@ -1,5 +1,5 @@
 ({
-    appDir: './tst',
+    appDir: './dev',
     baseUrl: './js',
     dir: './www',
     modules: [
@@ -7,16 +7,16 @@
             name: 'index'
         }
     ],
-    fileExclusionRegExp: /^(r|build)\.js$/,
     optimize: 'uglify',
     removeCombined: true,
     paths: {
-        jquery: "vendor/jquery-2.0.3.min",
-        jquerymobile: "vendor/jquery.mobile-1.3.2.min",
-        underscore: "vendor/lodash.underscore.min",
-        backbone: "vendor/backbone-min",
+        jquery: "vendor/jquery-2.0.3",
+        jquerymobile: "vendor/jquery.mobile-1.3.2",
+        underscore: "vendor/lodash.underscore",
+        backbone: "vendor/backbone",
         katra: "lib/katra",
-        kc: "lib/kc"
+        kc: "lib/kc.bnf",
+        rte: "lib/rte.android"
     },
     shim: {
         backbone: {

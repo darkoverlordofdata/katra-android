@@ -5,29 +5,32 @@
 # Copyright DarkOverlordOfData (c) 2013
 #+--------------------------------------------------------------------+
 #
-# This file is a part of Katrac
+# This file is a part of Katra
 #
-# Katrac is free software; you can copy, modify, and distribute
+# Katra is free software; you can copy, modify, and distribute
 # it under the terms of the MIT License
 #
 #+--------------------------------------------------------------------+
 #
-#   Katrac JISON Gtammer
+#   Katra JISON Grammar
 #
-#       Maps grammer rules to the runtime ast
+#       Maps grammar rules to the runtime ast
 #
 #
-#   To generate js/kc.js:
-#
-#       jison lib/kc.y lib/kc.l
-#
-#   The file kc.y references the Ast object in krt.coffee
 #   To use:
 #
-#       <script type='text/javascript' src='/js/kc.js'></script>
-#       <script type='text/coffeescript' src='/js/krt.js'></script>
+#       <script type='text/javascript' src='/js/rte.browser.js'></script>
+#       <script type='text/javascript' src='/js/kc.bnf.js'></script>
 #
 */
+%{
+
+    ast = typeof window !== "undefined" && window !== null ? window.katra : ast = require('./katra');
+    cmd = ast.command;
+    bnf = ast.bnf;
+
+
+%}
 
 
 %left OR
@@ -46,7 +49,7 @@
 %token INTEGER NUMBER STRING
 %token DEL GET LIST RUN SAVE SCR
 %token BASE DATA DEF DIM FND IMAGE
-%token END FOR GOSUB GOTO IF NEXT OF RETURN STOP THEN TO
+%token END FOR GOSUB GOTO IF NEXT OF RETURN STEP STOP THEN TO
 %token INPUT LET MAT PRINT RANDOMIZE READ USING
 %token REM
 %token ABS ATN COS EXP INT LOG RND SGN SIN SQR SUBSTR TAB TAN TIM
@@ -66,37 +69,44 @@
 #
 */
 Program
-    : Program Line EOF
-    | Program Line NEWLINE
-    | Line EOF
+    : Command NEWLINE EOF       -> new ast.Statement($1)
+    | GET FILE                  { cmd.get($2); return true;}
+    | Lines EOF
+    ;
+
+
+Lines
+    : Lines Line NEWLINE
     | Line NEWLINE
+    | NEWLINE
     ;
 
 Line
-    : INTEGER Statement             -> new krt.Statement($1, $2)
-    | Statement                     -> new krt.Statement($1)
-    | Command                       -> new krt.Statement($1)
+    : Statement                     -> new ast.Statement($1)
+    | INTEGER Statement             -> new ast.Statement($2, $1)
     ;
 
 /*
 #
-#   REPL> only commands
+#   Commands - only available using REPL
 #
 */
 Command
-    : CLS                               -> krt.cls()
-    | DEL                               -> krt.del()
-    | DEL INTEGER                       -> krt.del($2)
-    | DEL INTEGER ',' INTEGER           -> krt.del($2, $4)
-    | INTEGER                           -> krt.del($1)
-    | GET FILE                          -> krt.get($2)
-    | LIST                              -> krt.list()
-    | LIST INTEGER                      -> krt.list($2)
-    | LIST INTEGER ',' INTEGER          -> krt.list($2, $4)
-    | PURGE FILE                        -> krt.purge($2)
-    | RUN                               -> krt.run()
-    | SAVE FILE                         -> krt.save($2)
-    | SCR                               -> krt.scr()
+    : CLS                               -> cmd.cls()
+    | DEL INTEGER ',' INTEGER           -> cmd.del($2, $4)
+    | DEL INTEGER                       -> cmd.del($2)
+    | DEL                               -> cmd.del()
+    | INTEGER                           -> cmd.del($1)
+    | LIST INTEGER ',' INTEGER          -> cmd.list($2, $4)
+    | LIST INTEGER                      -> cmd.list($2)
+    | LIST                              -> cmd.list()
+    | PURGE FILE                        -> cmd.purge($2)
+    | QUIT                              -> cmd.quit()
+    | RUN                               -> cmd.run()
+    | SAVE FILE                         -> cmd.save($2)
+    | SCR                               -> cmd.scr()
+    | TRACE ON                          -> cmd.trace(true)
+    | TRACE OFF                         -> cmd.trace(false)
     ;
 
 /*
@@ -105,38 +115,40 @@ Command
 #
 */
 Statement
-    : BASE '(' INTEGER ')'              -> new krt.Base($3)
-    | DATA ConstantList                 -> new krt.Data($2)
+    : BASE '(' INTEGER ')'              -> new ast.Base($3)
+    | DATA ConstantList                 -> new ast.Data($2)
     | DEF FND '(' VAR ')' '=' Expression
-                                        -> new krt.Def($2, $4, $7)
-    | DIM DimList                       -> new krt.Dim($2)
-    | END                               -> new krt.End()
+                                        -> new ast.Def($2, $4, $7)
+    | DIM DimList                       -> new ast.Dim($2)
+    | END                               -> new ast.End()
+    | FOR VAR '=' Expression TO Expression STEP Expression
+                                        -> new ast.For($2, $4, $6, $8)
     | FOR VAR '=' Expression TO Expression
-                                        -> new krt.For($2, $4, $6)
-    | FOR VAR '=' Expression TO Expression STEP INTEGER
-                                        -> new krt.For($2, $4, $6, $8)
-    | GOTO INTEGER                      -> new krt.Goto($2)
-    | GOTO Expression OF IntegerList    -> new krt.Goto($2, $4)
-    | GOSUB INTEGER                     -> new krt.Gosub($2)
-    | IF Expression THEN INTEGER        -> new krt.If($2, $4)
-    | IMAGE ImageList                   -> new krt.Image($2)
-    | INPUT VarList                     -> new krt.Input($2)
-    | INPUT STRING ',' VarList          -> new krt.Input($4, $2)
-    | LET LetList Expression            -> new krt.Let($2, $3)
-    | LetList Expression                -> new krt.Let($1, $2)
-    | MAT VAR '=' ZER                   -> new krt.Mat(new krt.Var($2), krt.Zer)
-    | MAT VAR '=' CON                   -> new krt.Mat(new krt.Var($2), krt.Con)
-    | NEXT VAR                          -> new krt.Next(new krt.Var($2))
-    | PRINT                             -> new krt.Print()
-    | PRINT PrintList                   -> new krt.Print($2)
-    | PRINT PrintList PrintSep          -> new krt.Print($2, $3)
-    | PRINT USING INTEGER               -> new krt.Using($3)
-    | PRINT USING INTEGER ';' VarList   -> new krt.Using($3, $5)
-    | RANDOMIZE                         -> new krt.Randomize()
-    | READ VarList                      -> new krt.Read($2)
-    | RETURN                            -> new krt.Return()
-    | REM                               -> new krt.Rem($1)
-    | STOP                              -> new krt.Stop()
+                                        -> new ast.For($2, $4, $6)
+    | GO TO INTEGER                     -> new ast.Goto($3)
+    | GOTO INTEGER                      -> new ast.Goto($2)
+    | GOTO Expression OF IntegerList    -> new ast.Goto($2, $4)
+    | GOSUB INTEGER                     -> new ast.Gosub($2)
+    | IF Expression THEN INTEGER        -> new ast.If($2, $4)
+    | IMAGE ImageList                   -> new ast.Image($2)
+    | INPUT VarList                     -> new ast.Input($2)
+    | INPUT STRING ',' VarList          -> new ast.Input($4, $2)
+    | LET LetList Expression            -> new ast.Let($2, $3)
+    | LetList Expression                -> new ast.Let($1, $2)
+    | MAT VAR '=' ZER                   -> new ast.Mat(new ast.Var($2), ast.Zer)
+    | MAT VAR '=' CON                   -> new ast.Mat(new ast.Var($2), ast.Con)
+    | NEXT VAR                          -> new ast.Next(new ast.Var($2))
+    | PRINT PrintList PrintSep          -> new ast.Print($2, $3)
+    | PRINT PrintList                   -> new ast.Print($2)
+    | PRINT                             -> new ast.Print(new ast.Const(''))
+    | PRINT USING INTEGER ';' VarList   -> new ast.Using($3, $5)
+    | PRINT USING INTEGER               -> new ast.Using($3)
+    | RANDOMIZE                         -> new ast.Randomize()
+    | READ VarList                      -> new ast.Read($2)
+    | RESTORE                           -> new ast.Restore()
+    | RETURN                            -> new ast.Return()
+    | REM                               -> new ast.Rem($1)
+    | STOP                              -> new ast.Stop()
     ;
 
 /*
@@ -145,50 +157,50 @@ Statement
 #
 */
 Expression
-    : Expression OR  Expression             -> new krt.OR($1, $3)
-    | Expression AND Expression             -> new krt.AND($1, $3)
-    | NOT Expression                        -> new krt.NOT($2)
-    | Expression EQ  Expression             -> new krt.EQ($1, $3)
-    | Expression NE  Expression             -> new krt.NE($1, $3)
-    | Expression '>' Expression             -> new krt.GT($1, $3)
-    | Expression GE  Expression             -> new krt.GE($1, $3)
-    | Expression '<' Expression             -> new krt.LT($1, $3)
-    | Expression LE  Expression             -> new krt.LE($1, $3)
-    | Expression '+' Expression             -> new krt.Add($1, $3)
-    | Expression '-' Expression             -> new krt.Sub($1, $3)
-    | Expression '*' Expression             -> new krt.Mul($1, $3)
-    | Expression '/' Expression             -> new krt.Div($1, $3)
-    | Expression '^' Expression             -> new krt.Pow($1, $3)
+    : Expression OR  Expression             -> new ast.OR($1, $3)
+    | Expression AND Expression             -> new ast.AND($1, $3)
+    | NOT Expression                        -> new ast.NOT($2)
+    | Expression EQ  Expression             -> new ast.EQ($1, $3)
+    | Expression NE  Expression             -> new ast.NE($1, $3)
+    | Expression '>' Expression             -> new ast.GT($1, $3)
+    | Expression GE  Expression             -> new ast.GE($1, $3)
+    | Expression '<' Expression             -> new ast.LT($1, $3)
+    | Expression LE  Expression             -> new ast.LE($1, $3)
+    | Expression '+' Expression             -> new ast.Add($1, $3)
+    | Expression '-' Expression             -> new ast.Sub($1, $3)
+    | Expression '*' Expression             -> new ast.Mul($1, $3)
+    | Expression '/' Expression             -> new ast.Div($1, $3)
+    | Expression '^' Expression             -> new ast.Pow($1, $3)
     | '-' Expression %prec UMINUS           -> -$2
     | '(' Expression ')'                    -> $2
-    | VAR                                   -> new krt.Var($1)
-    | VAR '[' ExpressionList ']'            -> new krt.Var($1, $2, $3)
-    | FND '(' Expression ')'                -> new krt.Udf($1, $3)
-    | ABS '(' Expression ')'                -> new krt.ABS($3)
-    | ATN '(' Expression ')'                -> new krt.ATN($3)
-    | COS '(' Expression ')'                -> new krt.COS($3)
-    | EXP '(' Expression ')'                -> new krt.EXP($3)
-    | INT '(' Expression ')'                -> new krt.INT($3)
-    | LEN '(' Expression ')'                -> new krt.LEN($3)
-    | LIN '(' Expression ')'                -> new krt.LIN($3)
-    | LOG '(' Expression ')'                -> new krt.LOG($3)
-    | RND '(' Expression ')'                -> new krt.RND($3)
-    | SGN '(' Expression ')'                -> new krt.SGN($3)
-    | SIN '(' Expression ')'                -> new krt.SIN($3)
-    | SPA '(' Expression ')'                -> new krt.SPA($3)
-    | SQR '(' Expression ')'                -> new krt.SQR($3)
+    | VAR                                   -> new ast.Var($1)
+    | VAR '[' ExpressionList ']'            -> new ast.Var($1, $2, $3)
+    | FND '(' Expression ')'                -> new ast.FN($1, $3)
+    | ABS '(' Expression ')'                -> new ast.ABS($3)
+    | ATN '(' Expression ')'                -> new ast.ATN($3)
+    | COS '(' Expression ')'                -> new ast.COS($3)
+    | EXP '(' Expression ')'                -> new ast.EXP($3)
+    | INT '(' Expression ')'                -> new ast.INT($3)
+    | LEN '(' Expression ')'                -> new ast.LEN($3)
+    | LIN '(' Expression ')'                -> new ast.LIN($3)
+    | LOG '(' Expression ')'                -> new ast.LOG($3)
+    | RND '(' Expression ')'                -> new ast.RND($3)
+    | SGN '(' Expression ')'                -> new ast.SGN($3)
+    | SIN '(' Expression ')'                -> new ast.SIN($3)
+    | SPA '(' Expression ')'                -> new ast.SPA($3)
+    | SQR '(' Expression ')'                -> new ast.SQR($3)
     | SUBSTR '(' Expression ',' Expression ',' Expression ')'
-                                            -> new krt.SUBSTR($3, $5, $7)
-    | TAB '(' Expression ')'                -> new krt.TAB($3)
-    | TAN '(' Expression ')'                -> new krt.TAN($3)
-    | TIM '(' Expression ')'                -> new krt.TIM($3)
+                                            -> new ast.SUBSTR($3, $5, $7)
+    | TAB '(' Expression ')'                -> new ast.TAB($3)
+    | TAN '(' Expression ')'                -> new ast.TAN($3)
+    | TIM '(' Expression ')'                -> new ast.TIM($3)
     | Constant                              -> $1
     ;
 
 Constant
-    : INTEGER                               -> new krt.Const(parseInt($1))
-    | STRING                                -> new krt.Const($1)
-    | NUMBER                                -> new krt.Const(Number($1))
+    : INTEGER                                   -> new ast.Const(parseInt($1, 10))
+    | STRING                                    -> new ast.Const($1)
+    | NUMBER                                    -> new ast.Const(Number($1))
     ;
 
 /*
@@ -202,8 +214,8 @@ DimList
     ;
 
 Dim
-    : VAR '[' IntegerList ']'                   -> new krt.Var($1, $2, $3)
-    | VAR '(' IntegerList ')'                   -> new krt.Var($1, $2, $3)
+    : VAR '[' IntegerList ']'                   -> new ast.Var($1, $2, $3)
+    | VAR '(' IntegerList ')'                   -> new ast.Var($1, $2, $3)
     ;
 
 /*
@@ -213,9 +225,9 @@ Dim
 */
 LetList
     : VAR '='                                   -> [$1]
-    | VAR '[' ExpressionList ']' '='            -> [new krt.Var($1, $2, $3)]
+    | VAR '[' ExpressionList ']' '='            -> [new ast.Var($1, $2, $3)]
     | LetList VAR '='                           -> [$1, $2]
-    | LetList VAR '[' ExpressionList ']' '='    -> [$1, new krt.Var($2, $3, $4)]
+    | LetList VAR '[' ExpressionList ']' '='    -> [$1, new ast.Var($2, $3, $4)]
     ;
 
 ConstantList
@@ -224,8 +236,8 @@ ConstantList
     ;
 
 IntegerList
-    : INTEGER                                   -> [$1]
-    | IntegerList ',' INTEGER                   -> [$1, $3]
+    : INTEGER                                   -> [parseInt($1, 10)]
+    | IntegerList ',' INTEGER                   -> [$1, parseInt($3, 10)]
     ;
 
 ExpressionList
@@ -239,8 +251,8 @@ VarList
     ;
 
 VarItem
-    : VAR                                       -> [$1]
-    | VAR '[' ExpressionList ']'                -> [new krt.Var($1, $2, $3)]
+    : VAR                                       -> new ast.Var($1)
+    | VAR '[' ExpressionList ']'                -> new ast.Var($1, $2, $3)
     ;
 
 PrintList
@@ -249,9 +261,8 @@ PrintList
     ;
 
 PrintSep
-    : ':'                                       -> krt.NullSep
-    | ','                                       -> krt.Comma
-    | ';'                                       -> krt.Semic
+    : ';'                                       -> ast.Semic
+    | ','                                       -> ast.Comma
     ;
 
 /*
@@ -271,12 +282,12 @@ ImageItem
 
 ImageMask
     : ImageMaskItem                             -> [$1]
-    | INTEGER '(' ImageList ')'                 -> [$1, $2, $3, $4]
+    | INTEGER '(' ImageList ')'                 -> [parseInt($1, 10), $2, $3, $4]
     ;
 
 ImageMaskItem
     : VAR                                       -> [$1]
-    | INTEGER VAR                               -> [$1, $2]
+    | INTEGER VAR                               -> [parseInt($1, 10), $2]
     ;
 
 

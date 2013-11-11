@@ -7,8 +7,9 @@ define(function(require) {
   $ = require("jquery");
   Backbone = require("backbone");
   JST = require("JST");
-  require('kc');
+  require('rte');
   require('katra');
+  require('kc');
   return ReplView = (function(_super) {
     __extends(ReplView, _super);
 
@@ -25,12 +26,17 @@ define(function(require) {
     };
 
     ReplView.prototype.exec = function() {
-      var e;
-      try {
-        return kc.parse($('#repl-input').val());
-      } catch (_error) {
-        e = _error;
-        return $('#repl-output').html(e.toString());
+      var e, line, _i, _len, _ref1;
+      _ref1 = $('#repl-input').val().split('\n');
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        line = _ref1[_i];
+        try {
+          kc.parse(line + "\n");
+        } catch (_error) {
+          e = _error;
+          $('#repl-output').html(e.toString());
+          return;
+        }
       }
     };
 

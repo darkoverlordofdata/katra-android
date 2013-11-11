@@ -5,15 +5,16 @@ jquery.mobile.flatui.min.css
 
 js/index.js
 ----------------
-js/vendor/jquery-2.0.3.min.js
-js/vendor/lodash.underscore.min.js
-js/vendor/backbone-min.js
+js/vendor/jquery-2.0.3.js
+js/vendor/lodash.underscore.js
+js/vendor/backbone.js
 js/models/Program.js
 js/collections/Programs.js
 js/JST.js
 js/views/HomeView.js
-js/lib/kc.js
+js/lib/rte.android.js
 js/lib/katra.js
+js/lib/kc.bnf.js
 js/views/ReplView.js
 js/views/AboutView.js
 js/views/ProgramView.js
