@@ -5,14 +5,15 @@
 
 A basic language interpreter written in coffee-script.
 
-[![Katra](https://raw.github.com/darkoverlordofdata/katra-android/master/katra.png)](http://www.darkoverlordofdata.com/katrac/)
-
 Katra has one goal - to run StarTrek.bas games from the golden age of basic programming.
 
 
 Katra for Android uses jQueryMobile, BackboneJS, RequireJS and Cordova
 
 [Install] (https://raw.github.com/darkoverlordofdata/katra-android/master/Katra.apk)
+
+[![Katra](https://raw.github.com/darkoverlordofdata/katra-android/master/katra.png)](http://www.darkoverlordofdata.com/katrac/)
+
 
 ## License
 
