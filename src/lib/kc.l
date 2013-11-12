@@ -64,6 +64,9 @@ FuncID                  [Ff][Nn]{Letter}
 "AND"                   return 'AND';
 "OR"                    return 'OR';
 "NOT"                   return 'NOT';
+"And"                   return 'AND';
+"Or"                    return 'OR';
+"Not"                   return 'NOT';
 "and"                   return 'AND';
 "or"                    return 'OR';
 "not"                   return 'NOT';
@@ -93,6 +96,21 @@ FuncID                  [Ff][Nn]{Letter}
 "TAB"                   return 'TAB';
 "TAN"                   return 'TAN';
 "TIM"                   return 'TIM';
+
+"Abs"                   return 'ABS';
+"Atn"                   return 'ATN';
+"Cos"                   return 'COS';
+"Exp"                   return 'EXP';
+"Int"                   return 'INT';
+"Log"                   return 'LOG';
+"Rnd"                   return 'RND';
+"Sgn"                   return 'SGN';
+"Sin"                   return 'SIN';
+"Sqr"                   return 'SQR';
+"Substr"                return 'SUBSTR';
+"Tab"                   return 'TAB';
+"Tan"                   return 'TAN';
+"Tim"                   return 'TIM';
 
 "abs"                   return 'ABS';
 "atn"                   return 'ATN';
@@ -157,6 +175,50 @@ FuncID                  [Ff][Nn]{Letter}
 "TRACE"                 return 'TRACE'
 "USING"                 return 'USING';
 "ZER"                   return 'ZER';
+
+"Cls"                   return 'CLS';
+"Del"                   return 'DEL';
+"Get"                   return 'GET';
+"List"                  return 'LIST';
+"Run"                   return 'RUN';
+"Save"                  return 'SAVE';
+"Scr"                   return 'SCR';
+"Base"                  return 'BASE';
+"Data"                  return 'DATA';
+"Def"                   return 'DEF';
+"Dim"                   return 'DIM';
+"End"                   return 'END';
+/*
+"fnd"                   return 'FND';
+*/
+"For"                   return 'FOR';
+"Go"                    return 'GO';
+"Gosub"                 return 'GOSUB';
+"Goto"                  return 'GOTO';
+"If"                    return 'IF';
+"Image"                 return 'IMAGE';
+"Input"                 return 'INPUT';
+"Let"                   return 'LET';
+"Mat"                   return 'MAT'
+"Next"                  return 'NEXT';
+"Of"                    return 'OF';
+"Off"                   return 'OFF';
+"On"                    return 'ON';
+"Print"                 return 'PRINT';
+"Qurge"                 return 'PURGE';
+"Quit"                  return 'QUIT';
+"Randomize"             return 'RANDOMIZE';
+"Rem".*                 return 'REM';
+"Read"                  return 'READ';
+"Return"                return 'RETURN';
+"Restore"               return 'RESTORE';
+"Step"                  return 'STEP';
+"Stop"                  return 'STOP';
+"Then"                  return 'THEN';
+"To"                    return 'TO';
+"Trace"                 return 'TRACE';
+"Using"                 return 'USING';
+"Zer"                   return 'ZER';
 
 "cls"                   return 'CLS';
 "del"                   return 'DEL';
