@@ -34,15 +34,16 @@ define (require) ->
 
 
     render: ->
-      #$('.menu a').removeClass 'active'
-      #$('.menu a[href="#"]').parent().addClass 'active'
 
       programs = new Programs
       @program = programs.get(@id)
       $.get "bas/"+@program.get('source'), (data) =>
+
         $("#content").html JST.program(program: @program.toJSON())
         $('[data-role="content"]').trigger 'create'
 
-        parse = ->
+        load = ->
+          katra.command.scr()
           katra.parse data
-        setTimeout parse, 1
+
+        setTimeout load, 1

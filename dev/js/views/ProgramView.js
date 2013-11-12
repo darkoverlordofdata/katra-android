@@ -25,15 +25,16 @@ define(function(require) {
       programs = new Programs;
       this.program = programs.get(this.id);
       return $.get("bas/" + this.program.get('source'), function(data) {
-        var parse;
+        var load;
         $("#content").html(JST.program({
           program: _this.program.toJSON()
         }));
         $('[data-role="content"]').trigger('create');
-        parse = function() {
+        load = function() {
+          katra.command.scr();
           return katra.parse(data);
         };
-        return setTimeout(parse, 1);
+        return setTimeout(load, 1);
       });
     };
 
