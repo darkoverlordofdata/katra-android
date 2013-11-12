@@ -19,9 +19,11 @@ define (require) ->
   Backbone  = require("backbone")
   JST       = require("JST")
 
+  require 'jqueryconsole'
   require 'rte'   # i/o runtime
   require 'katra' # the katra runtime
   require 'kc'    # the katra compiler
+
 
   #
   # Basic Repl
@@ -34,23 +36,8 @@ define (require) ->
     # @return [Void]
     #
     render: ->
-      #$('.menu a').removeClass 'active'
-      #$('.menu a[href="#"]').parent().addClass 'active'
       $("#content").html JST.repl()
       $('[data-role="content"]').trigger('create')
-      $('.run-repl').on "click", @exec
       @
 
 
-    #
-    # Execute the input
-    #
-    # @return [Void]
-    #
-    exec: () ->
-      for line in $('#repl-input').val().split('\n')
-        try
-          kc.parse line+"\n"
-        catch e
-          $('#repl-output').html e.toString()
-          return

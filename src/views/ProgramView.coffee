@@ -22,6 +22,10 @@ define (require) ->
   #require 'prettify'
   #require 'basic'
 
+  require 'jqueryconsole'
+  require 'rte'   # i/o runtime
+  require 'katra' # the katra runtime
+  require 'kc'    # the katra compiler
 
   class ProgramView extends Backbone.View
 
@@ -36,6 +40,9 @@ define (require) ->
       programs = new Programs
       @program = programs.get(@id)
       $.get "bas/"+@program.get('source'), (data) =>
-        $("#content").html JST.program(program: @program.toJSON(), source:data)
+        $("#content").html JST.program(program: @program.toJSON())
         $('[data-role="content"]').trigger 'create'
-        #setTimeout prettyPrint, 1
+
+        parse = ->
+          katra.parse data
+        setTimeout parse, 1

@@ -3,6 +3,10 @@ jquery.mobile.flatui.min.css
 ----------------
 jquery.mobile.flatui.min.css
 
+katra.css
+----------------
+katra.css
+
 js/index.js
 ----------------
 js/vendor/jquery-2.0.3.js
@@ -12,7 +16,8 @@ js/models/Program.js
 js/collections/Programs.js
 js/JST.js
 js/views/HomeView.js
-js/lib/rte.android.js
+js/vendor/jquery.console.js
+js/lib/rte.browser.js
 js/lib/katra.js
 js/lib/kc.bnf.js
 js/views/ReplView.js

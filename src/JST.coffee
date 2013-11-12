@@ -39,30 +39,23 @@ define (require) ->
   # Program details
   #
     program:_.template """
-      <ul data-role="listview" data-ajax="false" data-inset="true" data-theme="a">
-      <li data-role="list-divider"><%= program.name %></li>
-      </ul>
-      <a href="#" data-role="button" data-icon="arrow-r" data-iconpos="right" data-inline="true">Run</a>
-      <div>
-          <pre class="prettyprint lang-basic"><%= source %>
-          </pre>
-      </div>
+      <div class="console"></div>
+      <script>
+      katra.command.cls();//  reset the console
+      </script>
       """
+
 
 
   #
   # Repl page
   #
     repl:_.template """
-      <form>
-      <label for="repl-input">Enter code:</label>
-      <textarea cols="40" rows="8" name="repl-input" id="repl-input"></textarea>
-      <hr>
-      <button type="button" class="run-repl" data-role="button" data-icon="arrow-r" data-iconpos="right" data-inline="true">Run</button>
-      <pre><code id="repl-output"></code></pre>
-      </form>
+      <div class="console"></div>
+      <script>
+      katra.command.cls();//  reset the console
+      </script>
       """
-
 
   #
   # About page

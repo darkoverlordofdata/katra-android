@@ -348,6 +348,9 @@ katra = {
     return katra[_use].parse($code);
   },
   command: {
+    cls: function() {
+      return _con.clear();
+    },
     del: function($start, $end) {
       var $lineno, _i, _results;
       if ($end == null) {

@@ -387,6 +387,8 @@ katra =
   #
   command:
 
+    cls: () ->
+      _con.clear()
     #
     # Delete line(s)
     #

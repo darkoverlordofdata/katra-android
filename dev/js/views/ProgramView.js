@@ -8,6 +8,10 @@ define(function(require) {
   Backbone = require("backbone");
   JST = require("JST");
   Programs = require("collections/Programs");
+  require('jqueryconsole');
+  require('rte');
+  require('katra');
+  require('kc');
   return ProgramView = (function(_super) {
     __extends(ProgramView, _super);
 
@@ -21,11 +25,15 @@ define(function(require) {
       programs = new Programs;
       this.program = programs.get(this.id);
       return $.get("bas/" + this.program.get('source'), function(data) {
+        var parse;
         $("#content").html(JST.program({
-          program: _this.program.toJSON(),
-          source: data
+          program: _this.program.toJSON()
         }));
-        return $('[data-role="content"]').trigger('create');
+        $('[data-role="content"]').trigger('create');
+        parse = function() {
+          return katra.parse(data);
+        };
+        return setTimeout(parse, 1);
       });
     };
 
